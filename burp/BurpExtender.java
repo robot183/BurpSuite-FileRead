@@ -86,6 +86,8 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
                                   panel.setLayout(new GridLayout(18, 1));
                                   panel.add(Button);
 
+                                  panel.add(Button);
+
                                  jSplitPane2.setLeftComponent(panel);
 
 
@@ -132,6 +134,7 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
         payloads.add("../../../../../etc/passwd");
 
         payloads.add("../../../../../etc/host");
+        payloads.add("../../../../../../windows/win.ini");
 
 
     }
@@ -178,7 +181,7 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
                         String name = para.getName();
 
                         name.toLowerCase();
-                        if ((name.contains("path") || name.contains("file") || name.contains("data") || name.contains("url"))) {
+                        if ((name.contains("path") || name.contains("file") || name.contains("data") || name.contains("url")|| name.contains("name"))) {
                             request = messageInfo.getRequest();
                             stdout.println(name);
 
@@ -224,7 +227,7 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
                         String name = para.getName();
                         name.toLowerCase();
 
-                        if ((name.contains("path") || name.contains("file") || name.contains("data") || name.contains("url"))) {
+                        if ((name.contains("path") || name.contains("file") || name.contains("data") || name.contains("url")|| name.contains("name"))) {
 
                             request = messageInfo.getRequest();
                             stdout.println(name);
@@ -283,20 +286,20 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
                      byte[] newresponse = newIHttpRequestResponse.getResponse();
                      IResponseInfo response = this.helpers.analyzeResponse(newresponse);
 //                     List<String> responseheader = response.getHeaders();
-                String statusCode = String.valueOf(response.getStatusCode());
+                     String statusCode = String.valueOf(response.getStatusCode());
+                     int Code = Integer.valueOf(statusCode).intValue();
+                    if(Code==200) {
 
+                        LogEntry logEntry = new LogEntry(helpers.analyzeRequest(newIHttpRequestResponse).getUrl().toString(), statusCode, "", newIHttpRequestResponse);
 
+                        //刷新第一个列表框
+                        log.add(logEntry);
+                        stdout.println("添加");
+                        BurpExtender.this.fireTableDataChanged();// size的值，不固定时，通过刷新列表框，展示实时数据
 
-                     LogEntry logEntry = new LogEntry(helpers.analyzeRequest(newIHttpRequestResponse).getUrl().toString(), statusCode, "",  newIHttpRequestResponse);
-
-                     //刷新第一个列表框
-                     log.add(logEntry);
-                     stdout.println("添加");
-                     BurpExtender.this.fireTableDataChanged();// size的值，不固定时，通过刷新列表框，展示实时数据
-
-                     stdout.println(statusCode);
-                     stdout.println(log.size());
-
+                        stdout.println(statusCode);
+                        stdout.println(log.size());
+                    }
                  }
 
     }
