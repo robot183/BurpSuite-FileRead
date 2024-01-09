@@ -6,3 +6,6 @@ BurpSuite 插件编写
 
 12.14  
 之前的版本，不方便使用；新版本 预期增加  参数定制  poc 定制
+v1.1  增加了 payload 定制
+payload 批量输入方法：不同payload之间使用， 作为分隔符。
+举例：../../../../../etc/passwd,../../../../../etc/host,../../../../../../windows/win.ini，
